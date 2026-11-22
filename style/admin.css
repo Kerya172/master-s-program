@@ -1,0 +1,392 @@
+/* ==========================================================
+   ICEhash — адмін-панель (світла панель керування)
+   ========================================================== */
+:root{
+  --bg: #2b2c2d;
+  --card: #cccbcb;
+  --line: #E3E6EB;
+  --line-soft: #EEF0F3;
+  --text: #171A1F;
+  --muted: #6A717D;
+  --bar: #16181D;
+  --accent: #269ed5;
+  --accent-soft: #EEF0FF;
+
+  --weak: #C2410C;
+  --weak-bg: #FFF4ED;
+  --weak-line: #FBD5BE;
+  --strong: #15803D;
+  --strong-bg: #EFFAF3;
+  --strong-line: #BFE6CD;
+  --dup: #B91C1C;
+  --dup-bg: #FDECEC;
+
+  --sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+*{ box-sizing: border-box; margin: 0; padding: 0; }
+
+body{
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Верхня панель ---------- */
+.topbar{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 56px;
+  padding: 0 28px;
+  background: var(--bar);
+  color: #F3F4F6;
+}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.brand-mark{
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 3px;
+  background: var(--accent);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.brand-tag{
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9CA3AF;
+  padding: 2px 8px;
+  border: 1px solid #343843;
+  border-radius: 999px;
+}
+
+.topbar-right{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #C7CBD3;
+  font-size: 13px;
+}
+
+.topbar-right strong{ color: #FFFFFF; font-weight: 600; }
+
+.btn-ghost{
+  font: inherit;
+  font-size: 13px;
+  color: #E5E7EB;
+  background: transparent;
+  border: 1px solid #343843;
+  border-radius: 7px;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-ghost:hover{ background: #23262E; border-color: #4B5060; }
+
+/* ---------- Основна частина ---------- */
+.page{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.page-head h1{
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.page-head p{
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ---------- Картки статистики ---------- */
+.stats{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+
+.stat{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 18px;
+}
+
+.stat-label{
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value{
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 4px;
+}
+
+.stat-hint{
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.stat.is-alert .stat-value{ color: var(--dup); }
+
+/* ---------- Панель інструментів ---------- */
+.toolbar{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+}
+
+.search{
+  flex: 1 1 260px;
+  max-width: 360px;
+  font: inherit;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #FAFBFC;
+  outline: none;
+}
+
+.search:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: #FFFFFF;
+}
+
+.toggle{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle input{ accent-color: var(--accent); }
+
+.toolbar-count{
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- Таблиця ---------- */
+.table-wrap{
+  overflow: auto;
+  max-height: calc(100vh - 330px);
+  min-height: 220px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 0 0 10px 10px;
+}
+
+table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th, td{
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+thead th{
+  position: sticky;
+  background: #FAFBFC;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  z-index: 2;
+}
+
+thead tr.group th{ top: 0; height: 34px; border-bottom: none; }
+thead tr.cols th{ top: 34px; border-bottom: 1px solid var(--line); }
+
+th.group-weak{
+  color: var(--weak);
+  background: var(--weak-bg);
+  border-top: 2px solid var(--weak);
+}
+
+th.group-strong{
+  color: var(--strong);
+  background: var(--strong-bg);
+  border-top: 2px solid var(--strong);
+}
+
+th.alg small{
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  color: #9AA1AC;
+}
+
+tbody tr:hover td{ background: #FAFAFF; }
+
+.cell-id{ color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.user-name{ font-weight: 600; }
+.user-email{ color: var(--muted); font-size: 12.5px; }
+
+.role{
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 1px 6px;
+  border-radius: 4px;
+  vertical-align: 1px;
+}
+
+.cell-date{ font-size: 12.5px; color: var(--muted); }
+
+/* ---------- Комірки з хешами ---------- */
+.hash{
+  display: block;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--mono);
+  font-size: 12px;
+  text-align: left;
+  color: #2B2F36;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 3px 6px;
+  margin: -3px -6px;
+  cursor: copy;
+}
+
+.hash:hover{ border-color: var(--line); background: #F7F8FA; }
+
+.full-hashes .hash{
+  max-width: 260px;
+  white-space: normal;
+  word-break: break-all;
+}
+
+td.weak .hash{ color: #7C2D12; }
+
+.hash.is-dup{
+  color: var(--dup);
+  background: var(--dup-bg);
+  border-color: #F6C4C4;
+}
+
+.hash.is-copied{
+  border-color: var(--strong);
+  background: var(--strong-bg);
+}
+
+.empty-cell{ color: #B4B9C2; font-family: var(--mono); }
+
+/* ---------- Стани ---------- */
+.state{
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--muted);
+  white-space: normal;
+}
+
+.notice{
+  max-width: 520px;
+  margin: 80px auto;
+  padding: 28px;
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.notice h2{ font-size: 18px; margin-bottom: 6px; }
+.notice p{ color: var(--muted); }
+.notice code{
+  display: block;
+  margin-top: 14px;
+  padding: 10px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  text-align: left;
+  background: #F4F5F7;
+  border-radius: 7px;
+  white-space: pre-wrap;
+}
+
+/* ---------- Легенда ---------- */
+.legend{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.legend span{ display: inline-flex; align-items: center; gap: 7px; }
+
+.dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.dot-weak{ background: var(--weak); }
+.dot-strong{ background: var(--strong); }
+.dot-dup{ background: var(--dup-bg); border: 1px solid var(--dup); }
+
+[hidden]{ display: none !important; }
+
+@media (max-width: 700px){
+  .topbar{ padding: 0 16px; }
+  .topbar-right span{ display: none; }
+  .page{ padding: 18px 14px; }
+  .table-wrap{ max-height: none; }
+}

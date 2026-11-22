@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Політика конфіденційності</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #ECEEF1;
+            color: #1C1F24;
+            font-family: "Times New Roman", Times, Georgia, serif;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 48px 16px 80px;
+        }
+
+        /* Шапка документа */
+        .section {
+            max-width: 820px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border: 1px solid #C9CDD3;
+            border-bottom: none;
+            border-top: 4px solid #1F2F46;
+            padding: 44px 64px 28px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #1F2F46;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            font-style: italic;
+            color: #4A5260;
+        }
+
+        /* Тіло документа */
+        .legal {
+            display: block;
+            max-width: 820px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border: 1px solid #C9CDD3;
+            border-top: none;
+            padding: 0 64px 48px;
+            text-align: justify;
+        }
+
+        .legal-meta {
+            text-align: right;
+            font-size: 14px;
+            color: #4A5260;
+            padding: 14px 0;
+            border-top: 1px solid #1F2F46;
+            border-bottom: 1px solid #C9CDD3;
+            margin-bottom: 8px;
+        }
+
+        .legal h2 {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #1F2F46;
+            margin: 28px 0 10px;
+            text-align: left;
+        }
+
+        .legal p { text-indent: 1.25em; }
+        .legal p + p { margin-top: 8px; }
+
+        .legal ul {
+            margin: 8px 0 0 2.25em;
+            list-style: none;
+        }
+
+        .legal li { position: relative; }
+        .legal li + li { margin-top: 4px; }
+        .legal li::before {
+            content: "–";
+            position: absolute;
+            left: -1.1em;
+        }
+
+        .legal strong { font-weight: bold; }
+
+        .legal a {
+            color: #1F3F78;
+            text-decoration: underline;
+        }
+
+        .legal a:hover { color: #0F2550; }
+
+        .legal-note {
+            margin-top: 32px;
+            padding: 12px 16px;
+            border: 1px solid #1F2F46;
+            border-left-width: 4px;
+            background: #F5F6F8;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .legal-back {
+            display: inline-block;
+            margin-top: 28px;
+            font-size: 15px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .section, .legal { border-left: none; border-right: none; padding-left: 20px; padding-right: 20px; }
+            .legal { text-align: left; }
+        }
+
+        @media print {
+            body { background: #FFFFFF; padding: 0; }
+            .section, .legal { border: none; max-width: none; }
+            .legal-back { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <div class="container">
+            <h1 class="title">Політика конфіденційності</h1>
+            <p class="subtitle">Які дані ми збираємо і як їх захищаємо</p>
+        </div>
+    </div>
+
+    <main class="legal">
+        <p class="legal-meta">Остання редакція: 19 листопада 2026 р.</p>
+
+        <h2>1. Хто обробляє дані</h2>
+        <p>Дані обробляє автор навчального проєкту — вебзастосунку для дослідження безпечного хешування паролів, створеного в межах магістерської роботи.</p>
+
+        <h2>2. Які дані збираються</h2>
+        <ul>
+            <li><strong>Ім'я</strong> — щоб показувати його у вашому профілі.</li>
+            <li><strong>Адреса електронної пошти</strong> — для входу в обліковий запис.</li>
+            <li><strong>Пароль</strong> — у відкритому вигляді він не зберігається (див. розділ 3).</li>
+            <li><strong>Технічні дані</strong> — дата реєстрації та останнього входу.</li>
+        </ul>
+
+        <h2>3. Як зберігаються паролі</h2>
+        <p>Пароль зберігається лише у вигляді хешів — результатів одностороннього перетворення, з яких неможливо безпосередньо отримати вихідний пароль.</p>
+        <p>Оскільки мета проєкту — порівняти алгоритми, для кожного пароля зберігається кілька хешів, обчислених різними алгоритмами. Частина з них (наприклад, застарілі швидкі хеш-функції) свідомо слабка: їх використовують як приклад того, як робити не варто.</p>
+
+        <h2>4. Для чого використовуються дані</h2>
+        <ul>
+            <li>Для реєстрації, входу та показу вашого профілю.</li>
+            <li>Для дослідження стійкості різних алгоритмів хешування до офлайн-атак (підбору пароля за хешем).</li>
+            <li>Для узагальнених результатів у магістерській роботі. Адреси пошти та імена в роботі не публікуються.</li>
+        </ul>
+
+        <h2>5. Хто має доступ</h2>
+        <p>Хеші паролів, адреси пошти й імена бачить лише адміністратор застосунку (автор проєкту). Дані не продаються і не передаються третім особам.</p>
+
+        <h2>6. Cookies</h2>
+        <p>Застосунок використовує лише технічно необхідні cookies, щоб ви залишалися авторизованими. Рекламних і аналітичних cookies немає.</p>
+
+        <h2>7. Строк зберігання</h2>
+        <p>Дані зберігаються до завершення роботи над проєктом або доки ви не попросите їх видалити, залежно від того, що настане раніше.</p>
+
+        <h2>8. Ваші права</h2>
+        <p>Ви можете будь-коли попросити показати, виправити або видалити ваші дані, а також відкликати згоду на їх обробку. Для цього напишіть автору проєкту.</p>
+
+        <div class="legal-note">
+            Деякі алгоритми в цьому дослідженні навмисно слабкі, тож використовуйте лише тестовий пароль, а не той, що ви вживаєте деінде.
+        </div>
+
+        <a class="legal-back" href="index.html">← Повернутися до реєстрації</a>
+    </main>
+</body>
+</html>

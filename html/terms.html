@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Умови використання</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #ECEEF1;
+            color: #1C1F24;
+            font-family: "Times New Roman", Times, Georgia, serif;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 48px 16px 80px;
+        }
+
+        /* Шапка документа */
+        .section {
+            max-width: 820px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border: 1px solid #C9CDD3;
+            border-bottom: none;
+            border-top: 4px solid #1F2F46;
+            padding: 44px 64px 28px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #1F2F46;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            font-style: italic;
+            color: #4A5260;
+        }
+
+        /* Тіло документа */
+        .legal {
+            display: block;
+            max-width: 820px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            border: 1px solid #C9CDD3;
+            border-top: none;
+            padding: 0 64px 48px;
+            text-align: justify;
+        }
+
+        .legal-meta {
+            text-align: right;
+            font-size: 14px;
+            color: #4A5260;
+            padding: 14px 0;
+            border-top: 1px solid #1F2F46;
+            border-bottom: 1px solid #C9CDD3;
+            margin-bottom: 8px;
+        }
+
+        .legal h2 {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #1F2F46;
+            margin: 28px 0 10px;
+            text-align: left;
+        }
+
+        .legal p { text-indent: 1.25em; }
+        .legal p + p { margin-top: 8px; }
+
+        .legal ul {
+            margin: 8px 0 0 2.25em;
+            list-style: none;
+        }
+
+        .legal li { position: relative; }
+        .legal li + li { margin-top: 4px; }
+        .legal li::before {
+            content: "–";
+            position: absolute;
+            left: -1.1em;
+        }
+
+        .legal strong { font-weight: bold; }
+
+        .legal a {
+            color: #1F3F78;
+            text-decoration: underline;
+        }
+
+        .legal a:hover { color: #0F2550; }
+
+        .legal-note {
+            margin-top: 32px;
+            padding: 12px 16px;
+            border: 1px solid #1F2F46;
+            border-left-width: 4px;
+            background: #F5F6F8;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .legal-back {
+            display: inline-block;
+            margin-top: 28px;
+            font-size: 15px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .section, .legal { border-left: none; border-right: none; padding-left: 20px; padding-right: 20px; }
+            .legal { text-align: left; }
+        }
+
+        @media print {
+            body { background: #FFFFFF; padding: 0; }
+            .section, .legal { border: none; max-width: none; }
+            .legal-back { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <div class="container">
+            <h1 class="title">Умови використання</h1>
+            <p class="subtitle">Правила користування навчальним вебзастосунком</p>
+        </div>
+    </div>
+
+    <main class="legal">
+        <p class="legal-meta">Остання редакція: 19 листопада 2026 р.</p>
+
+        <h2>1. Загальні положення</h2>
+        <p>Цей вебзастосунок створено як навчальний проєкт у межах магістерської роботи, присвяченої підсистемі безпечного хешування паролів і оцінці її стійкості до офлайн-атак. Він не є комерційним сервісом.</p>
+        <p>Реєструючись, ви підтверджуєте, що прочитали ці Умови та <a href="privacy.html">Політику конфіденційності</a> і погоджуєтеся з ними.</p>
+
+        <h2>2. Призначення сервісу</h2>
+        <p>Застосунок демонструє, як різні алгоритми хешування зберігають паролі, і використовується для порівняння їхньої стійкості. Дані, введені під час реєстрації, можуть брати участь у таких дослідженнях.</p>
+
+        <h2>3. Обліковий запис</h2>
+        <ul>
+            <li>Для реєстрації потрібні ім'я, адреса електронної пошти та пароль.</li>
+            <li>Ви відповідаєте за дані, які вводите, і за збереження свого пароля.</li>
+            <li>Один користувач — один обліковий запис.</li>
+        </ul>
+
+        <h2>4. Що заборонено</h2>
+        <ul>
+            <li>Намагатися отримати доступ до чужих облікових записів або до адміністративної панелі.</li>
+            <li>Навантажувати сервіс автоматизованими запитами, крім погоджених у межах дослідження.</li>
+            <li>Вводити чужі персональні дані без згоди їхнього власника.</li>
+        </ul>
+
+        <h2>5. Відмова від гарантій</h2>
+        <p>Сервіс надається «як є». Оскільки це навчальний проєкт, автор не гарантує безперервної роботи, збереження даних чи відсутності помилок і не несе відповідальності за наслідки його використання.</p>
+
+        <h2>6. Видалення облікового запису</h2>
+        <p>Ви можете будь-коли попросити видалити свій обліковий запис і пов'язані з ним дані, написавши автору проєкту. Автор також може видалити обліковий запис, якщо ці Умови порушено.</p>
+
+        <h2>7. Зміни умов</h2>
+        <p>Умови можуть оновлюватися. Дата останньої редакції вказана на початку сторінки.</p>
+
+        <div class="legal-note">
+            Будь ласка, не використовуйте тут паролі, які ви вживаєте на інших сайтах. Для перевірки застосунку достатньо тестового пароля.
+        </div>
+
+        <a class="legal-back" href="index.html">← Повернутися до реєстрації</a>
+    </main>
+</body>
+</html>

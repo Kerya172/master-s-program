@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICEhash — Профіль</title>
+    <link rel="stylesheet" href="../style/index.css">
+</head>
+<body>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">ICEhash</h1>
+        <p class="subtitle">Ваш особистий кабінет.</p>
+    </div>
+</section>
+
+<section>
+    <div class="registertransaction profile-card" id="profile-card" hidden>
+        <div class="profile-avatar" id="profile-avatar">?</div>
+
+        <h2 class="title" id="profile-username">—</h2>
+        <p class="subtitle" id="profile-email">—</p>
+
+        <div class="profile-row">
+            <span class="profile-label">Ім'я користувача</span>
+            <span class="profile-value" id="row-username">—</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Електронна пошта</span>
+            <span class="profile-value" id="row-email">—</span>
+        </div>
+        <div class="profile-row">
+            <span class="profile-label">Статус</span>
+            <span class="profile-value profile-badge">Активний акаунт</span>
+        </div>
+
+        <button type="button" id="logout-btn" class="logout-btn">Вийти з акаунта</button>
+    </div>
+
+    <div class="registertransaction" id="loading-card">
+        <p class="subtitle" style="text-align:center; margin:0;">Завантаження профілю…</p>
+    </div>
+</section>
+
+<script>
+    const API_BASE = '';
+
+    const profileCard = document.getElementById('profile-card');
+    const loadingCard = document.getElementById('loading-card');
+
+    async function loadProfile(){
+        try {
+            const res = await fetch(API_BASE + '/profile', {
+                credentials: 'include',
+            });
+
+            if (!res.ok) {
+                // Сесії немає або вона протухла — повертаємо на вхід.
+                window.location.href = '/index.html';
+                return;
+            }
+
+            const data = await res.json();
+
+            document.getElementById('profile-username').textContent = data.username;
+            document.getElementById('profile-email').textContent = data.email;
+            document.getElementById('row-username').textContent = data.username;
+            document.getElementById('row-email').textContent = data.email;
+            document.getElementById('profile-avatar').textContent = data.username.charAt(0).toUpperCase();
+
+            // Кнопка адмін-панелі — лише для адміністратора
+            if (data.is_admin) {
+                const adminLink = document.createElement('a');
+                adminLink.href = '/admin.html';
+                adminLink.className = 'logout-btn';
+                adminLink.textContent = 'Адмін-панель';
+                adminLink.style.cssText = 'display:block; text-align:center; margin-bottom:10px;';
+                document.getElementById('logout-btn').before(adminLink);
+            }
+
+            loadingCard.hidden = true;
+            profileCard.hidden = false;
+        } catch (err) {
+            window.location.href = '../html/index.html';
+        }
+    }
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        await fetch(API_BASE + '/logout', {
+            method: 'POST',
+            credentials: 'include',
+        }).catch(() => {});
+        window.location.href = '/index.html';
+    });
+
+    loadProfile();
+</script>
+
+</body>
+</html>

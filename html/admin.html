@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICEhash — Адмін-панель</title>
+    <link rel="stylesheet" href="../style/admin.css">
+</head>
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <span class="brand-mark">I</span>
+        ICEhash
+        <span class="brand-tag">Admin</span>
+    </div>
+    <div class="topbar-right">
+        <span>Адміністратор: <strong id="admin-name">—</strong></span>
+        <a class="btn-ghost" href="/profile.html">Профіль</a>
+        <button type="button" class="btn-ghost" id="logout-btn">Вийти</button>
+    </div>
+</header>
+
+<!-- Немає прав -->
+<div class="notice" id="forbidden" hidden>
+    <h2>Доступ заборонено</h2>
+    <p>Ця сторінка доступна лише адміністратору. Щоб видати права, виконайте в MySQL:</p>
+    <code>UPDATE users SET is_admin = 1
+WHERE username = 'ваш_логін';</code>
+</div>
+
+<main class="page" id="page" hidden>
+    <div class="page-head">
+        <h1>Користувачі та хеші паролів</h1>
+        <p>Кожен пароль збережено шістьма алгоритмами: трьома швидкими без солі та трьома стійкими із сіллю.</p>
+    </div>
+
+    <section class="stats">
+        <div class="stat">
+            <div class="stat-label">Користувачів</div>
+            <div class="stat-value" id="stat-users">0</div>
+            <div class="stat-hint" id="stat-admins">—</div>
+        </div>
+        <div class="stat" id="stat-dup-card">
+            <div class="stat-label">Однакові паролі</div>
+            <div class="stat-value" id="stat-dup">0</div>
+            <div class="stat-hint">користувачів зі спільним MD5-хешем</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Алгоритмів</div>
+            <div class="stat-value">6</div>
+            <div class="stat-hint">3 вразливі · 3 стійкі</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Остання реєстрація</div>
+            <div class="stat-value" id="stat-last" style="font-size:18px; margin-top:10px;">—</div>
+        </div>
+    </section>
+
+    <div class="toolbar">
+        <input type="search" class="search" id="search" placeholder="Пошук за ім'ям або поштою…">
+        <label class="toggle"><input type="checkbox" id="toggle-full"> Показувати хеші повністю</label>
+        <span class="toolbar-count" id="count"></span>
+    </div>
+
+    <div class="table-wrap" id="table-wrap">
+        <table>
+            <thead>
+                <tr class="group">
+                    <th colspan="3"></th>
+                    <th colspan="3" class="group-weak">Без солі — вразливі до офлайн-атак</th>
+                    <th colspan="3" class="group-strong">Із сіллю та уповільненням — стійкі</th>
+                </tr>
+                <tr class="cols">
+                    <th>#</th>
+                    <th>Користувач</th>
+                    <th>Зареєстровано</th>
+                    <th class="alg">MD5<small>128 біт</small></th>
+                    <th class="alg">SHA-1<small>160 біт</small></th>
+                    <th class="alg">SHA-256<small>256 біт</small></th>
+                    <th class="alg">PBKDF2-SHA256<small>600 000 ітерацій</small></th>
+                    <th class="alg">bcrypt<small>cost 12</small></th>
+                    <th class="alg">Argon2id<small>64 МіБ, t=3, p=4</small></th>
+                </tr>
+            </thead>
+            <tbody id="userTable">
+                <tr><td colspan="9" class="state">Завантаження…</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="legend">
+        <span><i class="dot dot-weak"></i>Швидкі хеші без солі</span>
+        <span><i class="dot dot-strong"></i>Стійкі хеші з унікальною сіллю</span>
+        <span><i class="dot dot-dup"></i>Такий самий хеш є в іншого користувача — паролі однакові</span>
+        <span>Клік по хешу — скопіювати</span>
+    </div>
+</main>
+
+<script>
+    const ALGS = ['md5', 'sha1', 'sha256', 'pbkdf2_sha256', 'bcrypt', 'argon2id'];
+    const WEAK = new Set(['md5', 'sha1', 'sha256']);
+
+    const tbody = document.getElementById('userTable');
+    const searchInput = document.getElementById('search');
+    let allUsers = [];
+    let md5Counts = new Map();
+
+    // Усі дані вставляємо через textContent — без innerHTML,
+    // щоб ім'я чи пошта користувача не могли виконатися як HTML/JS.
+    function el(tag, className, text){
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+    }
+
+    function formatDate(value){
+        if (!value) return '—';
+        return new Date(value).toLocaleString('uk-UA', {
+            day: '2-digit', month: '2-digit', year: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    }
+
+    function hashCell(alg, value){
+        const td = el('td', WEAK.has(alg) ? 'weak' : 'strong');
+        if (!value){
+            td.appendChild(el('span', 'empty-cell', '—'));
+            return td;
+        }
+        const btn = el('button', 'hash', value);
+        btn.type = 'button';
+        btn.title = value;
+
+        btn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(value);
+                btn.classList.add('is-copied');
+                setTimeout(() => btn.classList.remove('is-copied'), 900);
+            } catch { /* буфер обміну недоступний — нічого страшного */ }
+        });
+        td.appendChild(btn);
+        return td;
+    }
+
+    function render(){
+        const q = searchInput.value.trim().toLowerCase();
+        const list = q
+            ? allUsers.filter(u => u.username.toLowerCase().includes(q) || u.email.toLowerCase().includes(q))
+            : allUsers;
+
+        document.getElementById('count').textContent = `Показано ${list.length} з ${allUsers.length}`;
+        tbody.replaceChildren();
+
+        if (!list.length){
+            const tr = el('tr');
+            const td = el('td', 'state', allUsers.length ? 'Нічого не знайдено' : 'Ще немає зареєстрованих користувачів');
+            td.colSpan = 9;
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            return;
+        }
+
+        for (const u of list){
+            const tr = el('tr');
+            tr.appendChild(el('td', 'cell-id', u.id));
+
+            const who = el('td');
+            const name = el('div', 'user-name', u.username);
+            if (u.is_admin) name.appendChild(el('span', 'role', 'admin'));
+            who.append(name, el('div', 'user-email', u.email));
+            tr.appendChild(who);
+
+            const dates = el('td', 'cell-date');
+            dates.append(el('div', '', formatDate(u.created_at)),
+                         el('div', '', 'вхід: ' + formatDate(u.last_login)));
+            tr.appendChild(dates);
+
+            // однаковий пароль => однакові MD5/SHA-1/SHA-256
+            const isDup = md5Counts.get(u.hashes.md5) > 1;
+
+            for (const alg of ALGS){
+                const td = hashCell(alg, u.hashes[alg]);
+                if (isDup && WEAK.has(alg)){
+                    const btn = td.querySelector('.hash');
+                    btn.classList.add('is-dup');
+                    btn.title = `Такий самий хеш у ${md5Counts.get(u.hashes.md5)} користувачів\n${u.hashes[alg]}`;
+                }
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+    }
+
+    function fillStats(){
+        const total = allUsers.length;
+        const admins = allUsers.filter(u => u.is_admin).length;
+        const dupUsers = allUsers.filter(u => md5Counts.get(u.hashes.md5) > 1).length;
+        const last = allUsers.reduce((a, u) => (!a || new Date(u.created_at) > new Date(a.created_at)) ? u : a, null);
+
+        document.getElementById('stat-users').textContent = total;
+        document.getElementById('stat-admins').textContent = `з них адміністраторів: ${admins}`;
+        document.getElementById('stat-dup').textContent = dupUsers;
+        document.getElementById('stat-dup-card').classList.toggle('is-alert', dupUsers > 0);
+        document.getElementById('stat-last').textContent = last ? last.username : '—';
+    }
+
+    async function load(){
+        let res;
+        try {
+            res = await fetch('/admin/users', { credentials: 'include' });
+        } catch {
+            tbody.innerHTML = '<tr><td colspan="9" class="state">Сервер недоступний</td></tr>';
+            document.getElementById('page').hidden = false;
+            return;
+        }
+
+        if (res.status === 401){ window.location.href = '/index.html'; return; }
+        if (res.status === 403){ document.getElementById('forbidden').hidden = false; return; }
+
+        const data = await res.json();
+        document.getElementById('admin-name').textContent = data.admin.username;
+
+        allUsers = data.users;
+        md5Counts = new Map();
+        for (const u of allUsers){
+            if (u.hashes.md5) md5Counts.set(u.hashes.md5, (md5Counts.get(u.hashes.md5) || 0) + 1);
+        }
+
+        fillStats();
+        render();
+        document.getElementById('page').hidden = false;
+    }
+
+    searchInput.addEventListener('input', render);
+    document.getElementById('toggle-full').addEventListener('change', (e) => {
+        document.getElementById('table-wrap').classList.toggle('full-hashes', e.target.checked);
+    });
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        await fetch('/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
+        window.location.href = '/index.html';
+    });
+
+    load();
+</script>
+
+</body>
+</html>
